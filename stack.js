@@ -31,6 +31,9 @@ class Stack {
     //the pointer to the next item and that next item becomes the
     //top of the stack
     const node = this.top;
+    if (!node) {
+      return null;
+    }
     this.top = node.next;
     return node.data;
   }
@@ -86,14 +89,89 @@ function is_palindrome(str) {
   return str === reverseStr;
 }
 
-const parens = str => {
+const parenthesesMatch = str => {
+  const stack = new Stack();
+  const startParens = RegExp('[{\(\[]');
+  // find out why end paraens isnt working
+  const endParens = RegExp('[\)\]}]');
+  let char;
+  let removed;
+  let singleStop = false;
+  let doubleStop = false;
+  // console.log(endParens.test(']'));
+  for (let i=0; i < str.length; i++) {
+    char = str.charAt(i);
+    // console.log(i);
+    // if (char === '\'' && !doubleStop) {
+    //   singleStop = !singleStop;
+    // } 
+    // if (char === '"' && !singleStop) {
+    //   doubleStop = !doubleStop;
+    // } 
+
+    // if (!singleStop && !doubleStop) {
+    if (startParens.test(char)) {
+      // console.log('start', i);
+      stack.push({
+        char:str.charAt(i),
+        index: i
+      });
+    }
+    // if (endParens.test(char)) {
+    if (char === ')' || char === ']' || char === '}') {
+      // console.log('end', i);
+      removed = stack.pop();
+      if (removed) {
+        // console.log(removed);
+        if (char === ')') {
+          if (removed.char !== '(') {
+            return `expecting ) but found ${removed.char} @ index ${i}`;
+          }
+        }
+        if (char === ']') {
+          if (removed.char !== '[') {
+            return `expecting ] but found ${removed.char} @ index ${i}`;
+          }
+        }
+        if (char === '}') {
+          if (removed.char !== '{') {
+            return `expecting } but found ${removed.char} @ index ${i}`;
+          }
+        }
+      }
+      if (!removed) {
+        return `closed ${char} without open starting @ index ${i}`;
+      }
+    }
+  }
+
+  // stack.display();
   
+  if (!stack.peek()) {
+    return 'No unpaired';
+  }
+
+  // if (i === str.length-1) {
+  return `open ${stack.peek().data.char} without closed starting @ index ${stack.peek().data.index}`;
+  // }
+  // }
 };
 
 // true, true, true, false
-console.log(is_palindrome('dad'));
-console.log(is_palindrome('A man, a plan, a canal: Panama'));
-console.log(is_palindrome('1001'));
-console.log(is_palindrome('Tauhida'));
+// console.log(is_palindrome('dad'));
+// console.log(is_palindrome('A man, a plan, a canal: Panama'));
+// console.log(is_palindrome('1001'));
+// console.log(is_palindrome('Tauhida'));
+
+console.log(parenthesesMatch('(1 + 2) + 3'));
+console.log(parenthesesMatch('(1 + 2) + 3)'));
+console.log(parenthesesMatch(')1 + 2) + 3'));
+console.log(parenthesesMatch('(1 + 2 + (3)'));
+console.log(parenthesesMatch('([({})])'));
+console.log(parenthesesMatch('([({)}])'));
+// console.log(parenthesesMatch('\'{("\''));
+// console.log(parenthesesMatch('[{\'(\'}(\'\')]'));
+// console.log(parenthesesMatch('[{\'("}(\'\')]'));
 
 // main();
+
