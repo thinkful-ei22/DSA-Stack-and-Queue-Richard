@@ -62,26 +62,26 @@ class Stack {
 let main = () => {
   const stack = new Stack();
 
-  // stack.push('starTrek');
-  // stack.push('Kirk');
-  // stack.push('Spock');
-  // stack.push('McCoy');
-  // stack.push('Scotty');
-  // stack.display();
+  stack.push('starTrek');
+  stack.push('Kirk');
+  stack.push('Spock');
+  stack.push('McCoy');
+  stack.push('Scotty');
+  stack.display();
   // console.log(stack.pop());
   // stack.display();
 
-  stack.push(1);
-  stack.push(5);
-  stack.push(2);
-  stack.push(6);
-  stack.push(1);
-  stack.push(32);
-  stack.push(432);
-  stack.push(9);
-  stack.push(23);
-  stack.push(2);
-  stack.display();
+  // stack.push(1);
+  // stack.push(5);
+  // stack.push(2);
+  // stack.push(6);
+  // stack.push(1);
+  // stack.push(32);
+  // stack.push(432);
+  // stack.push(9);
+  // stack.push(23);
+  // stack.push(2);
+  // stack.display();
 
   sortStack(stack);
 
