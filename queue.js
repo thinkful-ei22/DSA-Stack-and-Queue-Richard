@@ -1,3 +1,5 @@
+// const {Stack} = require('./stack');
+
 //Creates a node containing the data and a reference to the next item
 class _Node {
   constructor(value) {
@@ -71,13 +73,60 @@ let main = () => {
   const queue = new Queue();
   queue.enqueue('starTrekQ');
   queue.enqueue('Kirk');
-  // queue.enqueue('Spock');
+  queue.enqueue('Spock');
   queue.enqueue('Uhura');
   queue.enqueue('Sulu');
   queue.enqueue('Checkov');
 
-  console.log(peek(queue));
-  display(queue);
+  // console.log(peek(queue));
+  // display(queue);
+
+  const squareQ = new Queue();
+  squareQ.enqueue({gender: 'F', name:'Jane'});
+  squareQ.enqueue({gender: 'M', name:'Frank'});
+  squareQ.enqueue({gender: 'M', name:'John'});
+  squareQ.enqueue({gender: 'M', name:'Sherlock'});
+  squareQ.enqueue({gender: 'F', name:'Madonna'});
+  squareQ.enqueue({gender: 'M', name:'David'});
+  squareQ.enqueue({gender: 'M', name:'Chris'});
+  squareQ.enqueue({gender: 'F', name:'Beyonce'});
+  squareQ.enqueue({gender: 'F', name:'Sasha'});
+  
+  dancePair(squareQ);
+};
+
+const dancePair = (queue) => {
+  let combinedQueue = queue;
+  let mQueue = new Queue();
+  let fQueue = new Queue();
+
+  while (combinedQueue.first !== null) {
+    if (combinedQueue.first.value.gender === 'M') {
+      mQueue.enqueue(combinedQueue.dequeue());
+    } else {
+      fQueue.enqueue(combinedQueue.dequeue());
+    }
+  }
+  
+  while (mQueue.first !== null && fQueue.first !== null) {
+    console.log(`Female dancer is: ${fQueue.first.value.name} and the male dancer is: ${mQueue.first.value.name}`);
+    mQueue.dequeue();
+    fQueue.dequeue();
+  }
+  let remainingCounter = 0;
+  if (mQueue.first !== null) {
+    while (mQueue.first !== null) {
+      mQueue.dequeue();
+      remainingCounter++;
+    }
+    console.log(`There are ${remainingCounter} male dancers waiting to dance.`);
+  } else {
+    while (fQueue.first !== null) {
+      fQueue.dequeue();
+      remainingCounter++;
+    }
+    console.log(`There are ${remainingCounter} female dancers waiting to dance.`);
+  }
 };
 
 main();
