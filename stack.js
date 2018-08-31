@@ -62,14 +62,31 @@ class Stack {
 let main = () => {
   const stack = new Stack();
 
-  stack.push('starTrek');
-  stack.push('Kirk');
-  stack.push('Spock');
-  stack.push('McCoy');
-  stack.push('Scotty');
+  // stack.push('starTrek');
+  // stack.push('Kirk');
+  // stack.push('Spock');
+  // stack.push('McCoy');
+  // stack.push('Scotty');
+  // stack.display();
+  // console.log(stack.pop());
+  // stack.display();
+
+  // stack.push(1);
+  // stack.push(5);
+  // stack.push(2);
+  // stack.push(6);
+  stack.push(1);
+  stack.push(32);
+  stack.push(432);
+  stack.push(9);
+  stack.push(23);
+  stack.push(2);
   stack.display();
-  console.log(stack.pop());
+
+  sortStack(stack);
+
   stack.display();
+  
 };
 
 function is_palindrome(str) {
@@ -93,32 +110,25 @@ const parenthesesMatch = str => {
   const stack = new Stack();
   const startParens = RegExp('[{\(\[]');
   // find out why end paraens isnt working
-  const endParens = RegExp('[\)\]}]');
+  // const endParens = RegExp('[\)\]}]');
   let char;
   let removed;
   let singleStop = false;
+  let doubleStop = false;
   let idx1;
   let idx2;
-  let doubleStop = false;
-  // console.log(endParens.test(']'));
   for (let i=0; i < str.length; i++) {
     char = str.charAt(i);
-    // console.log(i);
     if (char === '\'' && !doubleStop) {
       singleStop = !singleStop;
-      // console.log('stop 1');
       idx1=i;
     } 
     if (char === '"' && !singleStop) {
       doubleStop = !doubleStop;
-      // console.log('stop 2');
       idx2=i;
     } 
-    // console.log(singleStop || doubleStop, i);
     if (!singleStop && !doubleStop) {
-      // console.log(i);
       if (startParens.test(char)) {
-      // console.log('start', i);
         stack.push({
           char:str.charAt(i),
           index: i
@@ -126,10 +136,8 @@ const parenthesesMatch = str => {
       }
       // if (endParens.test(char)) {
       if (char === ')' || char === ']' || char === '}') {
-      // console.log('end', i);
         removed = stack.pop();
         if (removed) {
-        // console.log(removed);
           if (char === ')') {
             if (removed.char !== '(') {
               return `expecting ) but found ${removed.char} @ index ${i}`;
@@ -159,14 +167,86 @@ const parenthesesMatch = str => {
   if (doubleStop){
     return `unclosed double quote @ index ${idx2}`;
   }
-  // stack.display();
   
   if (!stack.peek()) {
     return 'No unpaired';
   }
-  // if (i === str.length-1) {
+
   return `open ${stack.peek().data.char} without closed starting @ index ${stack.peek().data.index}`;
-  // }
+};
+
+
+// function sortStack(stack) {
+//   const tempStack = new Stack();
+//   while (stack.top !== null) {
+//     let temp = stack.pop();
+//     while ((tempStack.top !== null) && (tempStack.peek() > temp)) {
+//       // console.log(peek(orderedStack));
+//       stack.push(tempStack.pop());
+//     }
+//     tempStack.push(temp);
+//   }
+//   console.log(JSON.stringify(tempStack));
+//   while (tempStack.top !== null) {
+//     stack.push(tempStack.pop());
+//   }
+//   console.log('This is the ordered stack', JSON.stringify(stack));
+// }
+const sortStack = (stk) => {
+  let stack1 = stk;
+  let stack2 = new Stack();
+  let unsorted = true;
+
+
+  // console.log(curr.data);
+  // console.log('nodeHold ----', nodeHold);
+  // console.log(curr.data > nodeHold );
+  while (unsorted) {  
+    let curr = stack1.peek();
+    let nodeHold = stack1.peek().next.data; 
+    let popped;
+    unsorted = false;  
+    while (curr) {      
+      console.log(curr.data, ' and ', nodeHold);
+      if (curr.data < nodeHold) {
+        popped = stack1.pop();
+        stack2.push(popped);
+        curr = stack1.peek();
+      } else {
+        if (nodeHold === null) {
+          popped = stack1.pop();
+          stack2.push(popped);
+          curr = stack1.peek();
+        } else {
+          nodeHold = curr.data;
+          stack1.pop();
+          popped = stack1.pop();
+          stack2.push(popped);
+          stack2.push(nodeHold);
+          curr = stack1.peek();
+          unsorted = true;
+        }
+      }
+      curr ? nodeHold = curr.next ? curr.next.data : null : null;
+    }
+    let refillPop;
+    let refill = stack2.peek();
+    while(refill){
+      refillPop = stack2.pop();
+      stack1.push(refillPop);
+      refill = stack2.peek();
+    }
+    curr = stack1.peek();
+  }
+
+  let refillPop;
+  let refill = stack2.peek();
+  while(refill){
+    refillPop = stack2.pop();
+    stk.push(refillPop);
+    refill = stack2.peek();
+  }
+  return stk;
 };
 
 // true, true, true, false
@@ -175,15 +255,15 @@ const parenthesesMatch = str => {
 // console.log(is_palindrome('1001'));
 // console.log(is_palindrome('Tauhida'));
 
-console.log(parenthesesMatch('(1 + 2) + 3'));
-console.log(parenthesesMatch('(1 + 2) + 3)'));
-console.log(parenthesesMatch(')1 + 2) + 3'));
-console.log(parenthesesMatch('(1 + 2 + (3)'));
-console.log(parenthesesMatch('([({})])'));
-console.log(parenthesesMatch('([({)}])'));
-console.log(parenthesesMatch('\'{("\''));
-console.log(parenthesesMatch('[{\'(\'}(\'\')]'));
-console.log(parenthesesMatch('[{\'("}(\'\')]'));
+// console.log(parenthesesMatch('(1 + 2) + 3'));
+// console.log(parenthesesMatch('(1 + 2) + 3)'));
+// console.log(parenthesesMatch(')1 + 2) + 3'));
+// console.log(parenthesesMatch('(1 + 2 + (3)'));
+// console.log(parenthesesMatch('([({})])'));
+// console.log(parenthesesMatch('([({)}])'));
+// console.log(parenthesesMatch('\'{("\''));
+// console.log(parenthesesMatch('[{\'(\'}(\'\')]'));
+// console.log(parenthesesMatch('[{\'("}(\'\')]'));
 
-// main();
+main();
 
