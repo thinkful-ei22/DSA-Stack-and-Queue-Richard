@@ -71,10 +71,10 @@ let main = () => {
   // console.log(stack.pop());
   // stack.display();
 
-  // stack.push(1);
-  // stack.push(5);
-  // stack.push(2);
-  // stack.push(6);
+  stack.push(1);
+  stack.push(5);
+  stack.push(2);
+  stack.push(6);
   stack.push(1);
   stack.push(32);
   stack.push(432);
@@ -187,7 +187,7 @@ const sortStack = (stk) => {
     unsorted = false;  
     while (curr) {      
       // console.log(curr.data, ' and ', nodeHold);
-      if (curr.data < nodeHold) {
+      if (curr.data <= nodeHold) {
         popped = stack1.pop();
         stack2.push(popped);
         curr = stack1.peek();
