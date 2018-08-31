@@ -175,39 +175,18 @@ const parenthesesMatch = str => {
   return `open ${stack.peek().data.char} without closed starting @ index ${stack.peek().data.index}`;
 };
 
-
-// function sortStack(stack) {
-//   const tempStack = new Stack();
-//   while (stack.top !== null) {
-//     let temp = stack.pop();
-//     while ((tempStack.top !== null) && (tempStack.peek() > temp)) {
-//       // console.log(peek(orderedStack));
-//       stack.push(tempStack.pop());
-//     }
-//     tempStack.push(temp);
-//   }
-//   console.log(JSON.stringify(tempStack));
-//   while (tempStack.top !== null) {
-//     stack.push(tempStack.pop());
-//   }
-//   console.log('This is the ordered stack', JSON.stringify(stack));
-// }
 const sortStack = (stk) => {
   let stack1 = stk;
   let stack2 = new Stack();
   let unsorted = true;
 
-
-  // console.log(curr.data);
-  // console.log('nodeHold ----', nodeHold);
-  // console.log(curr.data > nodeHold );
   while (unsorted) {  
     let curr = stack1.peek();
     let nodeHold = stack1.peek().next.data; 
     let popped;
     unsorted = false;  
     while (curr) {      
-      console.log(curr.data, ' and ', nodeHold);
+      // console.log(curr.data, ' and ', nodeHold);
       if (curr.data < nodeHold) {
         popped = stack1.pop();
         stack2.push(popped);
