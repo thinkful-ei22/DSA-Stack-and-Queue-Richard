@@ -97,63 +97,75 @@ const parenthesesMatch = str => {
   let char;
   let removed;
   let singleStop = false;
+  let idx1;
+  let idx2;
   let doubleStop = false;
   // console.log(endParens.test(']'));
   for (let i=0; i < str.length; i++) {
     char = str.charAt(i);
     // console.log(i);
-    // if (char === '\'' && !doubleStop) {
-    //   singleStop = !singleStop;
-    // } 
-    // if (char === '"' && !singleStop) {
-    //   doubleStop = !doubleStop;
-    // } 
-
-    // if (!singleStop && !doubleStop) {
-    if (startParens.test(char)) {
+    if (char === '\'' && !doubleStop) {
+      singleStop = !singleStop;
+      // console.log('stop 1');
+      idx1=i;
+    } 
+    if (char === '"' && !singleStop) {
+      doubleStop = !doubleStop;
+      // console.log('stop 2');
+      idx2=i;
+    } 
+    // console.log(singleStop || doubleStop, i);
+    if (!singleStop && !doubleStop) {
+      // console.log(i);
+      if (startParens.test(char)) {
       // console.log('start', i);
-      stack.push({
-        char:str.charAt(i),
-        index: i
-      });
-    }
-    // if (endParens.test(char)) {
-    if (char === ')' || char === ']' || char === '}') {
-      // console.log('end', i);
-      removed = stack.pop();
-      if (removed) {
-        // console.log(removed);
-        if (char === ')') {
-          if (removed.char !== '(') {
-            return `expecting ) but found ${removed.char} @ index ${i}`;
-          }
-        }
-        if (char === ']') {
-          if (removed.char !== '[') {
-            return `expecting ] but found ${removed.char} @ index ${i}`;
-          }
-        }
-        if (char === '}') {
-          if (removed.char !== '{') {
-            return `expecting } but found ${removed.char} @ index ${i}`;
-          }
-        }
+        stack.push({
+          char:str.charAt(i),
+          index: i
+        });
       }
-      if (!removed) {
-        return `closed ${char} without open starting @ index ${i}`;
+      // if (endParens.test(char)) {
+      if (char === ')' || char === ']' || char === '}') {
+      // console.log('end', i);
+        removed = stack.pop();
+        if (removed) {
+        // console.log(removed);
+          if (char === ')') {
+            if (removed.char !== '(') {
+              return `expecting ) but found ${removed.char} @ index ${i}`;
+            }
+          }
+          if (char === ']') {
+            if (removed.char !== '[') {
+              return `expecting ] but found ${removed.char} @ index ${i}`;
+            }
+          }
+          if (char === '}') {
+            if (removed.char !== '{') {
+              return `expecting } but found ${removed.char} @ index ${i}`;
+            }
+          }
+        }
+        if (!removed) {
+          return `closed ${char} without open starting @ index ${i}`;
+        }
       }
     }
   }
 
+  if (singleStop) {
+    return `unclosed single quote @ index ${idx1}`;
+  }
+  if (doubleStop){
+    return `unclosed double quote @ index ${idx2}`;
+  }
   // stack.display();
   
   if (!stack.peek()) {
     return 'No unpaired';
   }
-
   // if (i === str.length-1) {
   return `open ${stack.peek().data.char} without closed starting @ index ${stack.peek().data.index}`;
-  // }
   // }
 };
 
@@ -169,9 +181,9 @@ console.log(parenthesesMatch(')1 + 2) + 3'));
 console.log(parenthesesMatch('(1 + 2 + (3)'));
 console.log(parenthesesMatch('([({})])'));
 console.log(parenthesesMatch('([({)}])'));
-// console.log(parenthesesMatch('\'{("\''));
-// console.log(parenthesesMatch('[{\'(\'}(\'\')]'));
-// console.log(parenthesesMatch('[{\'("}(\'\')]'));
+console.log(parenthesesMatch('\'{("\''));
+console.log(parenthesesMatch('[{\'(\'}(\'\')]'));
+console.log(parenthesesMatch('[{\'("}(\'\')]'));
 
 // main();
 
