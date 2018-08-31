@@ -93,6 +93,19 @@ let main = () => {
   squareQ.enqueue({gender: 'F', name:'Sasha'});
   
   dancePair(squareQ);
+
+  const bankQ = new Queue();
+  bankQ.enqueue('A');
+  bankQ.enqueue('B');
+  bankQ.enqueue('C');
+  bankQ.enqueue('D');
+  bankQ.enqueue('E');
+  bankQ.enqueue('F');
+  bankQ.enqueue('G');
+  bankQ.enqueue('H');
+  bankQ.enqueue('I');
+  // display(bankQ);
+  ophidianBank(bankQ);
 };
 
 const dancePair = (queue) => {
@@ -113,20 +126,41 @@ const dancePair = (queue) => {
     mQueue.dequeue();
     fQueue.dequeue();
   }
-  let remainingCounter = 0;
+  let count = 0;
   if (mQueue.first !== null) {
     while (mQueue.first !== null) {
       mQueue.dequeue();
-      remainingCounter++;
+      count++;
     }
-    console.log(`There are ${remainingCounter} male dancers waiting to dance.`);
-  } else {
+    console.log(`There ${count > 1 ? 'are' : 'is'} ${count} male dancer${count > 1 ? 's' : ''} waiting to dance.`);
+  } else if (fQueue.first !== null) {
     while (fQueue.first !== null) {
       fQueue.dequeue();
-      remainingCounter++;
+      count++;
     }
-    console.log(`There are ${remainingCounter} female dancers waiting to dance.`);
+    console.log(`There ${count > 1 ? 'are' : 'is'} ${count} female dancer${count > 1 ? 's' : ''} waiting to dance.`);
+  } else {
+    console.log('Everyone has a partner! Dance Party!');
   }
 };
 
+
+const ophidianBank = queue => {
+  let hold;
+  let count=0;
+  while(peek(queue)) {
+    let random = Math.floor(Math.random()*4);
+    if (random === 0) {
+      hold = queue.dequeue();
+      console.log(`${hold} had to go back in line`);
+      queue.enqueue(hold);
+    } else {
+      queue.dequeue();
+    }
+    count++;
+    // display(queue);
+  }
+
+  console.log(`took ${count} tries`);
+};
 main();
